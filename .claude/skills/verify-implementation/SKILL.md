@@ -27,13 +27,16 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 
 이 스킬이 순차 실행하는 검증 스킬 목록입니다. `/manage-skills`가 스킬을 생성/삭제할 때 이 목록을 자동 업데이트합니다.
 
-(아직 등록된 검증 스킬이 없습니다)
-
-<!-- 스킬이 추가되면 아래 형식으로 등록:
 | # | 스킬 | 설명 |
 |---|------|------|
-| 1 | `verify-example` | 예시 검증 설명 |
--->
+| 1 | `verify-tech-stack` | 아키텍처 원칙 A1-A8 검증. package.json, tsconfig, vite 설정, Zustand 스토어 변경 후 사용 |
+| 2 | `verify-todo-domain` | TODO 도메인 규칙 B1-B6 검증. Todo 타입, CRUD 액션, 토글, 삭제 확인, 프런트-백 스키마 일치 |
+| 3 | `verify-pomodoro-domain` | 뽀모도로 도메인 C1-C7 및 TODO↔뽀모 연결 D1-D4 검증. timerStore, 타입 정의 변경 후 사용 |
+| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E8 검증. 컴포넌트, CSS, App 레이아웃 변경 후 사용 |
+| 5 | `verify-api-integration` | 프론트↔백엔드 API 연동 API-1~7 검증. todoStore, 서버 라우트 변경 후 사용 |
+| 6 | `verify-cross-store-sync` | todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~4 검증 |
+| 7 | `verify-session-recording` | PomodoroSession 생성·저장 SES-1~5 검증. timerStore, 세션 모델/라우트 변경 후 사용 |
+| 8 | `verify-build` | 프런트·백엔드 빌드 검증 BUILD-1~4. 소스 변경 후 타입 체크와 프로덕션 빌드가 에러 없이 통과하는지 확인 |
 
 ## 워크플로우
 
@@ -55,8 +58,6 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 
 **등록된 스킬이 1개 이상인 경우:**
 
-실행 대상 스킬 테이블의 내용을 표시합니다:
-
 ```markdown
 ## 구현 검증
 
@@ -65,7 +66,7 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 | # | 스킬 | 설명 |
 |---|------|------|
 | 1 | verify-<name1> | <description1> |
-| 2 | verify-<name2> | <description2> |
+| ... | ... | ... |
 
 검증 시작...
 ```
@@ -78,8 +79,8 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 
 해당 스킬의 `.claude/skills/verify-<name>/SKILL.md`를 읽고 다음 섹션을 파싱합니다:
 
-- **Workflow** — 실행할 검사 단계와 탐지 명령어
-- **Exceptions** — 위반이 아닌 것으로 간주되는 패턴
+- **Workflow / Steps** — 실행할 검사 단계와 탐지 명령어
+- **Exceptions / 예외** — 위반이 아닌 것으로 간주되는 패턴
 - **Related Files** — 검사 대상 파일 목록
 
 #### 2b. 검사 실행
@@ -95,8 +96,6 @@ Workflow 섹션에 정의된 각 검사를 순서대로 실행합니다:
    - 수정 권장 사항 (코드 예시 포함)
 
 #### 2c. 스킬별 결과 기록
-
-각 스킬 실행 완료 후 진행 상황을 표시합니다:
 
 ```markdown
 ### verify-<name> 검증 완료
@@ -141,8 +140,6 @@ Workflow 섹션에 정의된 각 검사를 순서대로 실행합니다:
 
 **이슈 발견 시:**
 
-각 이슈를 파일 경로, 문제 설명, 수정 권장 사항과 함께 나열합니다:
-
 ```markdown
 ### 발견된 이슈
 
@@ -154,7 +151,7 @@ Workflow 섹션에 정의된 각 검사를 순서대로 실행합니다:
 
 ### Step 4: 사용자 액션 확인
 
-이슈가 발견된 경우 `AskUserQuestion`을 사용하여 사용자에게 확인합니다:
+이슈가 발견된 경우 사용자에게 확인합니다:
 
 ```markdown
 ---
@@ -174,8 +171,6 @@ Workflow 섹션에 정의된 각 검사를 순서대로 실행합니다:
 
 **"전체 수정" 선택 시:**
 
-모든 수정을 순서대로 적용하며 진행 상황을 표시합니다:
-
 ```markdown
 ## 수정 적용 중...
 
@@ -187,7 +182,7 @@ X개 수정 완료.
 
 **"개별 수정" 선택 시:**
 
-각 이슈마다 수정 내용을 보여주고 `AskUserQuestion`으로 승인 여부를 확인합니다.
+각 이슈마다 수정 내용을 보여주고 승인 여부를 확인합니다.
 
 ### Step 6: 수정 후 재검증
 
@@ -195,8 +190,6 @@ X개 수정 완료.
 
 ```markdown
 ## 수정 후 재검증
-
-이슈가 있었던 스킬을 다시 실행합니다...
 
 | 검증 스킬 | 수정 전 | 수정 후 |
 |-----------|---------|---------|
