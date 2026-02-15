@@ -3,7 +3,7 @@ name: verify-cross-store-sync
 description: todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~4 검증.
 ---
 
-# 스토어間連動検証
+# 스토어간 관련 검증
 
 ## Purpose
 
