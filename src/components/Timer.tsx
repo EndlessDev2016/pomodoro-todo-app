@@ -10,9 +10,10 @@ dayjs.extend(duration);
 
 interface TimerProps {
   activeTodoTitle: string | null;
+  activeTodoPomodoros: number;
 }
 
-export default function Timer({ activeTodoTitle }: TimerProps) {
+export default function Timer({ activeTodoTitle, activeTodoPomodoros }: TimerProps) {
   const {
     phase,
     status,
@@ -51,7 +52,7 @@ export default function Timer({ activeTodoTitle }: TimerProps) {
       <div className="timer-display">{formatted}</div>
 
       <div className="timer-cycles">
-        완료한 뽀모도로: {completedCycles}회
+        완료한 뽀모도로: {activeTodoId ? activeTodoPomodoros : completedCycles}회
       </div>
 
       {activeTodoTitle && (
@@ -81,9 +82,33 @@ export default function Timer({ activeTodoTitle }: TimerProps) {
 
       {!activeTodoId && status === 'idle' && (
         <p className="timer-hint">
-          아래 할 일 목록에서 ▶ 버튼을 눌러 뽀모도로를 시작하세요
+          아래 할 일 목록을 클릭하여 선택한 후, ▶ 시작 버튼을 눌러주세요
         </p>
       )}
+
+      <button
+        className="btn"
+        style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.6 }}
+        onClick={() => {
+          const perm = Notification.permission;
+
+          if (perm === 'default') {
+            Notification.requestPermission().then((result) => {
+              if (result === 'granted') {
+                new Notification('🔔 테스트 알림', { body: '알림이 정상 작동합니다!' });
+              } else {
+                alert(`알림 권한이 "${result}" 상태입니다.`);
+              }
+            });
+          } else if (perm === 'granted') {
+            new Notification('🔔 테스트 알림', { body: '알림이 정상 작동합니다!' });
+          } else {
+            alert(`알림이 "${perm}" 상태입니다.\n주소창 🔒 → 사이트 설정 → 알림 → 허용으로 변경해주세요.`);
+          }
+        }}
+      >
+        🔔 알림 테스트
+      </button>
     </div>
   );
 }

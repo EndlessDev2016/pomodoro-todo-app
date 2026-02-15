@@ -13,15 +13,21 @@ function App() {
   const todos = useTodoStore((s) => s.todos);
   const fetchTodos = useTodoStore((s) => s.fetchTodos);
   const activeTodoId = useTimerStore((s) => s.activeTodoId);
+  const fetchTimerState = useTimerStore((s) => s.fetchTimerState);
 
-  // API-1: 앱 마운트 시 서버에서 TODO 목록 로딩
+  // API-1: 앱 마운트 시 서버에서 TODO 목록 + 타이머 상태 로딩
   useEffect(() => {
     fetchTodos();
-  }, [fetchTodos]);
+    fetchTimerState();
+  }, [fetchTodos, fetchTimerState]);
 
   const activeTodoTitle = activeTodoId
     ? todos.find((t) => t.id === activeTodoId)?.title ?? null
     : null;
+
+  const activeTodoPomodoros = activeTodoId
+    ? todos.find((t) => t.id === activeTodoId)?.completedPomodoros ?? 0
+    : 0;
 
   return (
     <div className="app">
@@ -31,7 +37,7 @@ function App() {
 
       <main className="app-main">
         <section className="timer-section">
-          <Timer activeTodoTitle={activeTodoTitle} />
+          <Timer activeTodoTitle={activeTodoTitle} activeTodoPomodoros={activeTodoPomodoros} />
         </section>
 
         <section className="todo-section">

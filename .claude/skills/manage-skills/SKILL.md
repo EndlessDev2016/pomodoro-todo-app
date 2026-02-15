@@ -31,11 +31,13 @@ argument-hint: "[선택사항: 특정 스킬 이름 또는 집중할 영역]"
 | 1 | `verify-tech-stack` | 아키텍처 원칙 A1-A8 | `package.json`, `server/package.json`, `tsconfig*.json`, `vite.config.ts`, `src/stores/*.ts` |
 | 2 | `verify-todo-domain` | TODO 도메인 B1-B6 | `src/types/index.ts`, `src/stores/todoStore.ts`, `src/components/TodoItem.tsx`, `server/src/models/{db,todo}.ts` |
 | 3 | `verify-pomodoro-domain` | 뽀모도로 도메인 C1-C7, 연결 D1-D4 | `src/stores/timerStore.ts`, `src/types/index.ts`, `src/stores/todoStore.ts` |
-| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E8 | `src/App.tsx`, `src/App.css`, `src/components/{Timer,TodoItem,TodoList}.tsx` |
+| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E9 | `src/App.tsx`, `src/App.css`, `src/components/{Timer,TodoItem,TodoList}.tsx` |
 | 5 | `verify-api-integration` | 프론트↔백엔드 연동 API-1~7 | `src/stores/todoStore.ts`, `server/src/routes/todos.ts`, `server/src/index.ts`, `vite.config.ts` |
-| 6 | `verify-cross-store-sync` | 스토어 간 연동·삭제 안전성 SYNC-1~4 | `src/stores/*.ts`, `src/components/{TodoItem,TodoList}.tsx` |
+| 6 | `verify-cross-store-sync` | 스토어 간 연동·삭제 안전성 SYNC-1~6 | `src/stores/*.ts`, `src/components/{TodoItem,TodoList}.tsx` |
 | 7 | `verify-session-recording` | 뽀모도로 세션 기록·저장 SES-1~5 | `src/stores/timerStore.ts`, `src/types/index.ts`, `server/src/models/{db,session}.ts`, `server/src/routes/sessions.ts` |
 | 8 | `verify-build` | 프런트·백엔드 빌드 검증 BUILD-1~4 | `package.json`, `server/package.json`, `tsconfig*.json`, `vite.config.ts`, `src/**/*.{ts,tsx}`, `server/src/**/*.ts` |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5 | `src/stores/timerStore.ts`, `server/src/models/{db,timer}.ts`, `server/src/routes/timer.ts`, `server/src/index.ts` |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5 | `server/src/models/{db,timer}.ts`, `server/src/routes/timer.ts`, `server/src/index.ts`, `src/stores/timerStore.ts` |
 
 ## 워크플로우
 

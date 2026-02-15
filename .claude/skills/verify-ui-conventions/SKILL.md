@@ -1,6 +1,6 @@
 ---
 name: verify-ui-conventions
-description: UX/동작 규칙 E1-E8 검증. 컴포넌트, CSS, App 레이아웃 변경 후 사용.
+description: UX/동작 규칙 E1-E9 검증. 컴포넌트, CSS, App 레이아웃 변경 후 사용.
 ---
 
 # UX/동작 규칙 검증
@@ -13,6 +13,7 @@ UI/UX 규칙(E1-E8)이 올바르게 구현되었는지 검증합니다:
 2. **네이밍 규칙** — 컴포넌트 PascalCase
 3. **반응형 디자인** — 미디어 쿼리 또는 반응형 유틸리티
 4. **UI 기능** — 완료 분리, 바인딩 표시, 🍅 카운트, 인라인 편집
+5. **클릭 동작** — 리스트 클릭→활성 TODO 선택만(시작X), 체크박스→실행중이면 alert 경고 후 토글
 
 ## When to Run
 
@@ -120,18 +121,37 @@ grep -n "isEditing\|setIsEditing" src/components/TodoItem.tsx
 **PASS:** 🍅 카운트 표시 + 인라인 편집 모드 존재
 **FAIL:** 누락
 
-### Step 7: 타이머 초기화 허용 확인 (E8)
+### Step 7: 타이머 상태 복원 (E8)
 
 **파일:** `src/stores/timerStore.ts`
 
-**검사:** Zustand persist 미사용 (새로고침 시 초기화 허용)
+**검사:** 서버 동기화로 브라우저 재접속 시 타이머 복원
 
 ```bash
-grep -c "persist" src/stores/timerStore.ts
+grep -c "fetchTimerState\|TIMER_API\|syncToServer" src/stores/timerStore.ts
 ```
 
-**PASS:** persist 0건 (새로고침 시 초기화됨)
-**FAIL:** persist 미들웨어 사용 시 MVP 위반
+**PASS:** fetchTimerState + syncToServer 로직 존재 (서버 동기화)
+**FAIL:** 타이머 상태 복원 로직 없음
+
+### Step 8: TODO 리스트 클릭 동작 (E9)
+
+**파일:** `src/components/TodoItem.tsx`, `src/stores/timerStore.ts`
+
+**검사:**
+- 리스트(li) 클릭 → 활성 TODO 선택만 (타이머 시작하지 않음, setActiveTodo 호출)
+- 실행 중에 다른 TODO 클릭 → confirm 경고("현재 진행 중인 뽀모도로가 초기화됩니다") 후 전환
+- 체크박스 클릭 → 실행 중인 TODO면 alert 경고("완료 시 뽀모도로 시간이 초기화됩니다"), 확인 시 토글 + 리셋
+- 유저가 반드시 ▶ 시작 버튼을 눌러야 타이머 시작
+
+```bash
+grep -n "handleItemClick\|handleCheckbox\|setActiveTodo" src/components/TodoItem.tsx
+grep -n "setActiveTodo" src/stores/timerStore.ts
+grep -n "alert\|window.confirm" src/components/TodoItem.tsx
+```
+
+**PASS:** li 클릭 → setActiveTodo(선택만) + 실행중 다른 TODO 전환 시 confirm 경고 + 체크박스 → 실행중 alert 경고 존재 + 타이머 자동 시작 없음
+**FAIL:** 리스트 클릭 시 start() 호출 또는 실행중 전환/체크박스에 경고 없음
 
 ## Output Format
 
@@ -144,7 +164,8 @@ grep -c "persist" src/stores/timerStore.ts
 | 4 | 완료 분리 | PASS/FAIL | 상세 |
 | 5 | 바인딩 표시 | PASS/FAIL | 상세 |
 | 6 | 🍅 + 인라인편집 | PASS/FAIL | 상세 |
-| 7 | 타이머 초기화 | PASS/FAIL | 상세 |
+| 7 | 타이머 복원 | PASS/FAIL | 상세 |
+| 8 | 클릭 동작 | PASS/FAIL | 상세 |
 ```
 
 ## Exceptions

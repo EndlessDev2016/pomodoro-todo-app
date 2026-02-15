@@ -52,6 +52,19 @@ export async function initDb(): Promise<Database> {
     );
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS timer_state (
+      id TEXT PRIMARY KEY DEFAULT 'singleton',
+      phase TEXT NOT NULL DEFAULT 'work',
+      status TEXT NOT NULL DEFAULT 'idle',
+      remainingSeconds INTEGER NOT NULL DEFAULT 1500,
+      startedAt TEXT,
+      completedCycles INTEGER NOT NULL DEFAULT 0,
+      activeTodoId TEXT,
+      activeSessionId TEXT
+    );
+  `);
+
   saveDb();
   return db;
 }

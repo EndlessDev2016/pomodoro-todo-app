@@ -16,8 +16,10 @@
 | 1 | `verify-tech-stack` | 아키텍처 원칙 A1-A8 검증 |
 | 2 | `verify-todo-domain` | TODO 도메인 규칙 B1-B6 검증 |
 | 3 | `verify-pomodoro-domain` | 뽀모도로 도메인 C1-C7 및 TODO↔뽀모 연결 D1-D4 검증 |
-| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E8 검증 |
-| 5 | `verify-api-integration` | 프론트↔백엔드 연동 API-1~7 검증 |
-| 6 | `verify-cross-store-sync` | 스토어 간 연동·삭제 안전성 SYNC-1~4 검증 |
+| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E9 검증 |
+| 5 | `verify-api-integration` | 프런트↔백엔드 연동 API-1~7 검증 |
+| 6 | `verify-cross-store-sync` | 스토어 간 연동·삭제 안전성 SYNC-1~6 검증 |
 | 7 | `verify-session-recording` | 뽀모도로 세션 기록·저장 SES-1~5 검증 |
 | 8 | `verify-build` | 프런트·백엔드 빌드 검증 BUILD-1~4 |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5 검증 |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5 |

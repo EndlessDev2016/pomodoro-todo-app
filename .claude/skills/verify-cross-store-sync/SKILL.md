@@ -1,6 +1,6 @@
 ---
 name: verify-cross-store-sync
-description: todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~4 검증.
+description: todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~6 검증.
 ---
 
 # 스토어간 관련 검증
@@ -12,7 +12,9 @@ todoStore와 timerStore 간 연동 및 삭제 안전성을 검증합니다:
 1. **삭제→리셋** — 바인딩된 Todo 삭제 시 타이머 리셋
 2. **삭제 확인** — confirm() 대화상자로 실수 방지
 3. **카운트 연동** — 작업 완료 시 자동 incrementPomodoro
-4. **시작 차단** — 완료 Todo에 대한 뽀모도로 시작 불가
+4. **선택 차단** — 완료 Todo에 대한 뽀모도로 선택 불가
+5. **실행중 완료 경고** — 실행 중인 TODO 체크박스 클릭 시 alert 경고 후 토글+리셋
+6. **실행중 전환 경고** — 실행 중에 다른 TODO 클릭 시 confirm 경고 후 전환
 
 ## When to Run
 
@@ -80,20 +82,51 @@ grep -n "incrementPomodoro\|todoStore\|useTodoStore" src/stores/timerStore.ts
 
 **수정 방법:** onPhaseComplete에 `if (phase === 'work' && activeTodoId) useTodoStore.getState().incrementPomodoro(activeTodoId)` 추가
 
-### Step 4: 완료 Todo 뽀모도로 시작 차단 (SYNC-4)
+### Step 4: 완료 Todo 뽀모도로 선택 차단 (SYNC-4)
 
 **파일:** `src/components/TodoItem.tsx`
 
-**검사:** completed Todo의 ▶ 버튼 비활성화/미렌더링
+**검사:** completed Todo의 리스트 클릭 시 뽀모도로 선택 차단
 
 ```bash
-grep -B2 -A5 "completed\|▶\|start\|bind" src/components/TodoItem.tsx | head -30
+grep -B2 -A5 "handleItemClick" src/components/TodoItem.tsx
+grep -n "todo.completed" src/components/TodoItem.tsx
 ```
 
-**PASS:** `todo.completed` 체크로 ▶ 버튼 disabled 또는 조건부 렌더링
-**FAIL:** 완료된 Todo에서도 ▶ 버튼 활성화
+**PASS:** `todo.completed` 체크로 뽀모도로 선택 차단 (return early)
+**FAIL:** 완료된 Todo에서도 뽀모도로 선택 가능
 
-**수정 방법:** `{!todo.completed && <button onClick={...}>▶</button>}` 패턴 적용
+### Step 5: 실행중 TODO 완료 시 alert 경고 (SYNC-5)
+
+**파일:** `src/components/TodoItem.tsx`
+
+**검사:** 실행 중(active + running)인 TODO의 체크박스 클릭 시 alert 경고 + 확인 후 토글+리셋
+
+```bash
+grep -n "alert\|window.confirm\|초기화" src/components/TodoItem.tsx
+grep -n "handleCheckbox" src/components/TodoItem.tsx
+```
+
+**PASS:** 실행중 TODO 체크박스에 alert/confirm 경고 + "초기화" 안내 + 확인 시 toggle+reset
+**FAIL:** 실행중 TODO도 경고 없이 즉시 완료 토글
+
+**수정 방법:** handleCheckboxChange에서 isActive + running 체크 → confirm 후 onToggle + reset
+
+### Step 6: 실행중 다른 TODO 전환 경고 (SYNC-6)
+
+**파일:** `src/components/TodoItem.tsx`
+
+**검사:** 타이머 실행 중에 다른 TODO를 클릭하면 confirm 경고 후 전환
+
+```bash
+grep -B2 -A8 "handleItemClick" src/components/TodoItem.tsx
+grep -n "isRunning.*isActive\|!isActive" src/components/TodoItem.tsx
+```
+
+**PASS:** `isRunning && !isActive` 조건 + confirm 경고("초기화됩니다") + 취소 시 전환 안 함
+**FAIL:** 실행 중에 다른 TODO 클릭 시 경고 없이 즉시 전환
+
+**수정 방법:** handleItemClick에서 `isRunning && !isActive` 체크 → confirm 후 onSelectTodo
 
 ## Output Format
 
@@ -104,6 +137,8 @@ grep -B2 -A5 "completed\|▶\|start\|bind" src/components/TodoItem.tsx | head -3
 | 2 | 삭제 confirm | PASS/FAIL | 상세 |
 | 3 | 카운트 연동 | PASS/FAIL | 상세 |
 | 4 | 완료 Todo 차단 | PASS/FAIL | 상세 |
+| 5 | 실행중 완료 경고 | PASS/FAIL | 상세 |
+| 6 | 실행중 전환 경고 | PASS/FAIL | 상세 |
 ```
 
 ## Exceptions

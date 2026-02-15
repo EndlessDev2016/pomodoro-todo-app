@@ -143,6 +143,13 @@
   margin-bottom: 8px;
   background: #fff;
   gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.todo-item:hover:not(.completed) {
+  background: #f0f7ff;
+  border-color: #b6d4fe;
 }
 
 .todo-item.active {
@@ -158,13 +165,17 @@
 .todo-content {
   flex: 1;
   min-width: 0;
-}
-
-.todo-checkbox {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.todo-checkbox-input {
   cursor: pointer;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .todo-title {
@@ -176,6 +187,7 @@
   margin: 4px 0 0 26px;
   font-size: 0.8rem;
   color: #666;
+  width: 100%;
 }
 
 .todo-pomodoro-count {

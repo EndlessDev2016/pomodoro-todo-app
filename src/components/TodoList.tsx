@@ -12,7 +12,7 @@ export default function TodoList() {
   const [newDescription, setNewDescription] = useState('');
 
   const { todos, addTodo, updateTodo, deleteTodo, toggleTodo } = useTodoStore();
-  const { activeTodoId, start, status } = useTimerStore();
+  const { activeTodoId, setActiveTodo, status, reset } = useTimerStore();
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,10 +22,9 @@ export default function TodoList() {
     setNewDescription('');
   };
 
-  // E5 + D1: TODO 항목에서 뽀모도로를 시작
-  const handleStartPomodoro = (todoId: string) => {
-    if (status === 'running') return; // 이미 실행 중이면 무시
-    start(todoId);
+  // E9: TODO 항목 선택만 (타이머 시작X, 유저가 ▶ 시작 버튼 눌러야 시작)
+  const handleSelectTodo = (todoId: string) => {
+    setActiveTodo(todoId);
 
     // E4: 알림 권한 요청
     if (Notification.permission === 'default') {
@@ -64,10 +63,12 @@ export default function TodoList() {
               key={todo.id}
               todo={todo}
               isActive={activeTodoId === todo.id}
+              isRunning={status === 'running'}
               onToggle={toggleTodo}
               onDelete={deleteTodo}
               onUpdate={(id, title, desc) => updateTodo(id, { title, description: desc })}
-              onStartPomodoro={handleStartPomodoro}
+              onSelectTodo={handleSelectTodo}
+              onReset={reset}
             />
           ))}
         </ul>
@@ -86,10 +87,12 @@ export default function TodoList() {
                 key={todo.id}
                 todo={todo}
                 isActive={false}
+                isRunning={false}
                 onToggle={toggleTodo}
                 onDelete={deleteTodo}
                 onUpdate={(id, title, desc) => updateTodo(id, { title, description: desc })}
-                onStartPomodoro={handleStartPomodoro}
+                onSelectTodo={handleSelectTodo}
+                onReset={reset}
               />
             ))}
           </ul>

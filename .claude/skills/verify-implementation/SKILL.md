@@ -32,11 +32,13 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 | 1 | `verify-tech-stack` | 아키텍처 원칙 A1-A8 검증. package.json, tsconfig, vite 설정, Zustand 스토어 변경 후 사용 |
 | 2 | `verify-todo-domain` | TODO 도메인 규칙 B1-B6 검증. Todo 타입, CRUD 액션, 토글, 삭제 확인, 프런트-백 스키마 일치 |
 | 3 | `verify-pomodoro-domain` | 뽀모도로 도메인 C1-C7 및 TODO↔뽀모 연결 D1-D4 검증. timerStore, 타입 정의 변경 후 사용 |
-| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E8 검증. 컴포넌트, CSS, App 레이아웃 변경 후 사용 |
-| 5 | `verify-api-integration` | 프론트↔백엔드 API 연동 API-1~7 검증. todoStore, 서버 라우트 변경 후 사용 |
-| 6 | `verify-cross-store-sync` | todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~4 검증 |
+| 4 | `verify-ui-conventions` | UX/동작 규칙 E1-E9 검증. 컴포넌트, CSS, App 레이아웃 변경 후 사용 |
+| 5 | `verify-api-integration` | 프런트↔백엔드 API 연동 API-1~7 검증. todoStore, 서버 라우트 변경 후 사용 |
+| 6 | `verify-cross-store-sync` | todoStore↔timerStore 간 연동 및 삭제 안전성 SYNC-1~6 검증 |
 | 7 | `verify-session-recording` | PomodoroSession 생성·저장 SES-1~5 검증. timerStore, 세션 모델/라우트 변경 후 사용 |
 | 8 | `verify-build` | 프런트·백엔드 빌드 검증 BUILD-1~4. 소스 변경 후 타입 체크와 프로덕션 빌드가 에러 없이 통과하는지 확인 |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5 검증. 브라우저 재접속 시 타이머 복원 |
+| 9 | `verify-timer-sync` | 서버 사이드 타이머 동기화 SYNC-T1~T5. 브라우저 닫아도 타이머 상태 유지, 서버 시간 기준 경과시간 계산 |
 
 ## 워크플로우
 

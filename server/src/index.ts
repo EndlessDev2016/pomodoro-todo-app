@@ -6,6 +6,7 @@ import express from 'express';
 import cors from 'cors';
 import todosRouter from './routes/todos.js';
 import sessionsRouter from './routes/sessions.js';
+import timerRouter from './routes/timer.js';
 import { initDb } from './models/db.js';
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 // API 라우트
 app.use('/api/todos', todosRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/timer', timerRouter);
 
 // DB 초기화 후 서버 시작
 initDb().then(() => {
